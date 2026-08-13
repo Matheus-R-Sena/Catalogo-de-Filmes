@@ -12,6 +12,9 @@ decimal OrcamentoMissao = 1250000.75m;
 int SituacaoCod = 42;
 String ObservacaoInicial = "";
 
+//Estou adicionando um comentário nesta linha. I'm adding a new comentary line.
+
+
 Console.WriteLine("TELEMETRIA DA MISSÃO");
 Console.WriteLine($" {Nome}");
 Console.WriteLine($" {categoria}");
