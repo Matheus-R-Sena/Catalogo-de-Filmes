@@ -1,11 +1,23 @@
-var produto = new Produto("mouse", "85.95m", 10);
+var produto = new Produto("mouse", 85.95m, 10);
 
 Console.WriteLine(produto.nome);
 
-produto.vender(3);
+Console.WriteLine($"Produto: {produto.nome}");
+Console.WriteLine($"A quanntidade do estoque inicial é: {produto.QuantidadeEmEstoque}");
+
+bool primeiravenda = produto.vender(3);
+Console.WriteLine($"A primeira venda de 3 unidades foi classificada como {primeiravenda}");
+
 produto.repor(2);
-produto.vender(20);
-Console.WriteLine(produto.QuantidadeEmEstoquePUB);
+Console.WriteLine($"A reposição após a venda atualizou o estoque para: {produto.QuantidadeEmEstoque}");
+
+bool segundaVenda = produto.vender(20);
+Console.WriteLine($"A segunda venda obteve seguinte status: {segundaVenda} deixando a quantidade em: {produto.QuantidadeEmEstoque}");
+
+Console.WriteLine($"Estoque final: {produto.QuantidadeEmEstoque}");
+Console.WriteLine(
+    $"Valor total do estoque: {produto.CalculaValorEstoque:F2}"
+    );
 
 
 public class Produto
@@ -29,19 +41,24 @@ public class Produto
 
     public bool vender (int number)
     {
-        if (number <= QuantidadeEmEstoquePUB)
+        if (number <= this.QuantidadeEmEstoque && number > 0)
         {
-            QuantidadeEmEstoquePUB -= number;
+            this.QuantidadeEmEstoque -= number;
             return true;
-        } else
-        {
-            return false;
-        }
+        } 
+        
+        return false;
     
+    }
+
+    public decimal CalculaValorEstoque ()
+    {
+        return this.QuantidadeEmEstoque * this.preco;
+        
     }
     public decimal CalcularValorDoEstoque()
     {
-        return preco*QuantidadeEmEstoquePUB;
+        return preco*QuantidadeEmEstoque;
     }
 
 }
