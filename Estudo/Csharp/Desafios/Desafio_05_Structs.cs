@@ -16,7 +16,7 @@ struct Point {
         var dy = Y - other.Y;
         return Math.Sqrt(dx * dx + dy * dy);
     }
-
+    
     public override string ToString() => $"{X}, {Y}";
 }
 
