@@ -12,8 +12,8 @@ var apresenta = new Biblioteca.Apresentacao.Relatorio();
 //Apresentando o livro
 
 apresenta.ExibirLivro(livro01);
-apresenta.ExibirLivro(Livro02);
-apresenta.ExibirLivro(Livro03);
+apresenta.ExibirLivro(livro02);
+apresenta.ExibirLivro(livro03);
 
 //Emprestimos
 
@@ -21,7 +21,7 @@ bool emprestimo01 = servicoEmprestimo.Emprestar(livro01);
 PrintaEmprestimo(emprestimo01, livro01);
 
 emprestimo01 = servicoEmprestimo.Devolver(livro01);
-PrintaEmprestimo(emprestimo01, livro01);
+apresenta.ExibirLivro(livro01);
 
 bool emprestimo02 = servicoEmprestimo.Emprestar(livro02);
 PrintaEmprestimo(emprestimo02, livro02);
@@ -29,21 +29,21 @@ PrintaEmprestimo(emprestimo02, livro02);
 emprestimo02 = servicoEmprestimo.Emprestar(livro02);
 PrintaEmprestimo(emprestimo02, livro02);
 
+emprestimo02 = servicoEmprestimo.Devolver(livro02);
 
-
-
-
-
+apresenta.ExibirLivro(livro01);
+apresenta.ExibirLivro(livro02);
+apresenta.ExibirLivro(livro03);
 
 void PrintaEmprestimo (bool emprestimo, Biblioteca.Dominio.Livro livro)
 {
     if (emprestimo)
     {
-        Console.WriteLine($"O livro: {livro.titulo} do autor {livro.autor} foi emprestado com sucesso!");
+        Console.WriteLine($"\nO livro: {livro.titulo} do autor {livro.autor} foi emprestado com sucesso!");
     }else
         {
             
-        Console.WriteLine($"O livro: {livro.titulo} do autor {livro.autor} encontra-se indiponivel! Nao eh possivel fazer emprestimo");
+        Console.WriteLine($"\nO livro: {livro.titulo} do autor {livro.autor} encontra-se indiponivel! Nao eh possivel fazer emprestimo");
         }
 }
 
@@ -102,9 +102,9 @@ namespace Biblioteca.Apresentacao
     {
         public void ExibirLivro (Livro livro)
         {
-            Console.WriteLine($"Livro: {livro.titulo}");
+            Console.WriteLine($"\nLivro: {livro.titulo}");
             Console.WriteLine($"autor: {livro.autor}");
-            Console.WriteLine($"Situação de disponibilidade: {livro.disponivel}");
+            Console.WriteLine($"Situação de disponibilidade: {livro.disponivel}\n");
         }   
     }
 }
