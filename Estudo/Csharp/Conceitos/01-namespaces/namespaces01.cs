@@ -1,18 +1,51 @@
-var livro = new Livro ("Hobbit", "Tolkien");
+using Biblioteca.Dominio;
+using Biblioteca.Servicos;
+using Biblioteca.Apresentacao;
 
-Console.WriteLine($"Situacao do livro {livro.titulo} eh: {livro.disponivel}");
+var livro01 = new Biblioteca.Dominio.Livro ("Hobbit", "Tolkien");
+var livro02 = new Biblioteca.Dominio.Livro ("Senhor dos aneis", "Tolkien");
+var livro03 = new Biblioteca.Dominio.Livro ("A guerra dos tronos", "J R R Martin");
 
-bool emprestimo = Biblioteca.Servicos.EmprestimoService.Emprestar(livro);
+var servicoEmprestimo = new Biblioteca.Servicos.EmprestimoService();
+var apresenta = new Biblioteca.Apresentacao.Relatorio();
 
-Console.WriteLine($"O emprestimo de {livro.titulo} foi {emprestimo}");
-Console.WriteLine($"O livro de {livro.titulo} se encontra com status de disponibilidade {livro.disponivel}");
-bool emprestimo02 = Biblioteca.Servicos.EmprestimoService.Emprestar(livro);
-Console.WriteLine($"O segundo emprestimo tem status {emprestimo02}");
+//Apresentando o livro
 
-bool devolucao01 = Biblioteca.Servicos.EmprestimoService.Devolver(livro);
+apresenta.ExibirLivro(livro01);
+apresenta.ExibirLivro(Livro02);
+apresenta.ExibirLivro(Livro03);
 
-Console.WriteLine($"O status de disponibilidade do livro {livro.titulo} eh {livro.disponivel}");
+//Emprestimos
 
+bool emprestimo01 = servicoEmprestimo.Emprestar(livro01);
+PrintaEmprestimo(emprestimo01, livro01);
+
+emprestimo01 = servicoEmprestimo.Devolver(livro01);
+PrintaEmprestimo(emprestimo01, livro01);
+
+bool emprestimo02 = servicoEmprestimo.Emprestar(livro02);
+PrintaEmprestimo(emprestimo02, livro02);
+
+emprestimo02 = servicoEmprestimo.Emprestar(livro02);
+PrintaEmprestimo(emprestimo02, livro02);
+
+
+
+
+
+
+
+void PrintaEmprestimo (bool emprestimo, Biblioteca.Dominio.Livro livro)
+{
+    if (emprestimo)
+    {
+        Console.WriteLine($"O livro: {livro.titulo} do autor {livro.autor} foi emprestado com sucesso!");
+    }else
+        {
+            
+        Console.WriteLine($"O livro: {livro.titulo} do autor {livro.autor} encontra-se indiponivel! Nao eh possivel fazer emprestimo");
+        }
+}
 
 namespace Biblioteca.Dominio
 {
@@ -41,7 +74,7 @@ namespace Biblioteca.Servicos
             if(livro.disponivel)
             {
                 livro.disponivel = false;
-                return = true;
+                return true;
             }else
                 {
                     return false;
@@ -53,7 +86,7 @@ namespace Biblioteca.Servicos
             if(!livro.disponivel)
             {
                 livro.disponivel = true;
-                return = true;
+                return true;
             }else
                 {
                     return false;
