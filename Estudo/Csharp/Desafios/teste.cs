@@ -1,59 +1,53 @@
-using B.A.Application.Helpers;
-using B.A.Application.Interfaces;
-using B.A.Domain.Interfaces;
-using B.A.Domain.Models;
-using B.A.Shared.Enums;
-using System;
+using ABC.DBEFE.Shared.Enums;
+using ABC.DBEFE.Shared.Enums.Domain;
 
-namespace B.C.Application.UseCases.Acoes
+namespace ABC.DBEFE.Domain.Models
 {
-    public class CriarAcaoUseCase : IInteractor<CriarAcaoRequest, Result<CriarAcaoResponse>>
+    public class Acao : BaseEntity<int>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        public virtual eSimNao Ativo { get; set; }
+        public virtual string Controller { get; set; }
+        public virtual string Action { get; set; }
+        public virtual string URL { get; set; }
+        public virtual int Prioridade { get; set; }
+        public virtual eEventosDeTurma EventoEnum { get; set; }
+        public virtual string Pai { get; set; }
+        public virtual int PrioridadeInterna { get; set; }
+        public virtual eSimNao VisivelNoMenu { get; set; }
+        public virtual eModulosDoSistema Sistema { get; set; }
+        public virtual eSimNao UrlExterna { get; set; } = eSimNao.N;
 
-        public CriarAcaoUseCase(IUnitOfWork unitOfWork)
+        public virtual string RetornaNomeDeAgrupamento()
         {
-            _unitOfWork = unitOfWork;
+            string agrupamento = Pai;
+            if (string.IsNullOrEmpty(Pai))
+            {
+                agrupamento = Controller;
+            }
+
+            return agrupamento;
         }
 
-        public Result<CriarAcaoResponse> Execute(CriarAcaoRequest request)
+        public virtual object ToJson()
         {
-            try
+            return ToJson(this);
+        }
+
+        public static object ToJson(Acao acao)
+        {
+            return new
             {
-                Acao acao = new Acao
-                {
-                    Action = request.Action,
-                    Controller = request.Controller,
-                    EventoEnum = request.EventoEnum,
-                    Pai = request.Pai,
-                    Prioridade = request.Prioridade,
-                    PrioridadeInterna = request.PrioridadeInterna,
-                    URL = request.URL,
-                    VisivelNoMenu = request.VisivelNoMenu.ConvertToEnum(),
-                    Sistema = request.Sistema,
-                    UrlExterna = request.UrlExterna.ConvertToEnum()
-                };
-
-                _unitOfWork.AcaoRepository.SaveOrUpdate(acao);
-
-                foreach (AcaoPerfil acaoPerfil in request.EscolhaPerfis)
-                {
-                    if (acaoPerfil.Check)
-                    {
-                        Perfil perfil = _unitOfWork.PerfilRepository.Get(acaoPerfil.PerfilId);
-                        perfil.Acoes.Add(acao);
-                        _unitOfWork.PerfilRepository.SaveOrUpdate(perfil);
-                    }
-                }
-                _unitOfWork.Commit();
-
-                return Result<CriarAcaoResponse>.Success(new CriarAcaoResponse(acao), "Ação criada com sucesso!");
-            }
-            catch (Exception e)
-            {
-                _unitOfWork.Rollback();
-                return Result<CriarAcaoResponse>.Failure("Não foi possível criar a ação!", e);
-            }
+                controller = acao.Controller,
+                action = acao.Action,
+                url = acao.URL,
+                prioridade = acao.Prioridade,
+                evento = acao.EventoEnum.ToString(),
+                agrupamento = acao.Pai,
+                prioridadeInterna = acao.PrioridadeInterna,
+                visivelNoMenu = acao.VisivelNoMenu.ToDescription(),
+                Sistema = acao.Sistema.ToString(),
+                urlExterna = acao.UrlExterna.ToDescription()
+            };
         }
     }
 }
